@@ -48,6 +48,10 @@
         th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
         th { background-color: var(--primary); color: var(--secondary); }
         
+        /* Tambahan CSS untuk tombol hapus satuan */
+        .btn-delete-item { background: #e74c3c; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; }
+        .btn-delete-item:hover { background: #c0392b; }
+
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
         .modal { background: white; padding: 30px; border-radius: 10px; text-align: center; width: 350px; }
         .modal h3 { margin-top: 0; }
@@ -97,7 +101,7 @@
                     <label for="filter-tanggal" style="font-weight: bold; color: var(--secondary);">Filter Tanggal:</label>
                     <select id="filter-tanggal" class="filter-select" onchange="renderRekapan()"></select>
                 </div>
-                <button class="modal-btn btn-no" style="padding: 10px 15px;" onclick="clearHistory()">🗑️ Hapus Riwayat</button>
+                <button class="modal-btn btn-no" style="padding: 10px 15px;" onclick="clearHistory()">🗑️ Hapus Semua</button>
             </div>
         </div>
 
@@ -108,6 +112,7 @@
                     <th>Detail Pesanan</th>
                     <th>Total Pembayaran</th>
                     <th>Metode</th>
+                    <th style="width: 80px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="rekapan-body"></tbody>
@@ -166,8 +171,8 @@
     const db = firebase.database();
 
     const menuItems = [
-        { id: 'm1', name: 'Es Matcha', price: 10000, category: 'Minuman' },
-        { id: 'm2', name: 'Es Cokelat', price: 10000, category: 'Minuman' },
+        { id: 'm1', name: 'Matcha', price: 10000, category: 'Minuman' },
+        { id: 'm2', name: 'Cokelat', price: 10000, category: 'Minuman' },
         
         { id: 'f1', name: 'Keju Polos', price: 12000, category: 'Makanan' },
         { id: 'f2', name: 'Glaze Coklat', price: 15000, category: 'Makanan' },
@@ -203,16 +208,17 @@
     ];
 
     let cart = [];
-    let transactions = []; // Sekarang dikosongkan dulu, nanti diisi dari database Cloud
+    let transactions = []; 
     const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka);
 
-    // 3. LISTENER REAL-TIME FIREBASE (Menggantikan load dari LocalStorage)
+    // 3. LISTENER REAL-TIME FIREBASE (Mengambil data sekaligus ID/Key nya)
     db.ref('sales_history').on('value', (snapshot) => {
         transactions = [];
         snapshot.forEach((childSnapshot) => {
-            transactions.push(childSnapshot.val());
+            let data = childSnapshot.val();
+            data.id = childSnapshot.key; // MENANGKAP ID UNIK DARI FIREBASE
+            transactions.push(data);
         });
-        // Render ulang tabel rekapan setiap ada data baru (sinkron otomatis di semua device)
         renderRekapan();
     });
 
@@ -310,7 +316,6 @@
         processPayment('CASH', kembalian);
     }
 
-    // 4. UPDATE PROSES PEMBAYARAN: Kirim ke Firebase
     function processPayment(method, kembalian = 0) {
         const total = getTotal();
         const now = new Date();
@@ -322,10 +327,9 @@
             items: summary, 
             total: total, 
             method: method,
-            timestamp: firebase.database.ServerValue.TIMESTAMP // Waktu persis di server Google
+            timestamp: firebase.database.ServerValue.TIMESTAMP 
         };
         
-        // Push ke Cloud Database
         db.ref('sales_history').push(dataTransaksi).then(() => {
             let pesanSukses = `✅ Pesanan Selesai!\nPembayaran via ${method} berhasil.`;
             if (method === 'CASH') {
@@ -337,7 +341,6 @@
             cart = []; 
             updateCartUI(); 
             closeModal(); 
-            // Note: Tidak perlu panggil renderRekapan() disini karena otomatis terpanggil oleh db.ref(...).on('value')
         }).catch((error) => {
             alert("Gagal menyimpan ke database: " + error.message);
         });
@@ -368,19 +371,37 @@
         
         [...filteredTransactions].reverse().forEach(trx => {
             totalRev += trx.total;
+            // Menambahkan tombol Hapus di baris td terakhir
             tbody.innerHTML += `
                 <tr>
                     <td>${trx.date}</td>
                     <td>${trx.items}</td>
                     <td>${formatRp(trx.total)}</td>
                     <td><strong>${trx.method}</strong></td>
+                    <td style="text-align: center;">
+                        <button class="btn-delete-item" onclick="deleteSingleTransaction('${trx.id}')">Hapus</button>
+                    </td>
                 </tr>`;
         });
         
         document.getElementById('total-revenue').innerText = formatRp(totalRev);
     }
 
-    // 5. UPDATE HAPUS RIWAYAT: Hapus dari Firebase
+    // FITUR BARU: Hapus Satu Pesanan
+    function deleteSingleTransaction(transactionId) {
+        const konfirmasi = confirm("Apakah Anda yakin ingin menghapus pesanan ini?");
+        if (konfirmasi) {
+            // Mencari spesifik data berdasarkan ID di database dan menghapusnya
+            db.ref('sales_history/' + transactionId).remove().then(() => {
+                // Tidak perlu alert sukses agar lebih cepat, langsung hilang dari tabel
+                // karena otomatis di-trigger oleh db.ref('sales_history').on('value', ...)
+            }).catch((error) => {
+                alert("Gagal menghapus data: " + error.message);
+            });
+        }
+    }
+
+    // FITUR LAMA: Hapus Semua Riwayat
     function clearHistory() {
         if (transactions.length === 0) {
             alert("Riwayat penjualan sudah kosong.");
