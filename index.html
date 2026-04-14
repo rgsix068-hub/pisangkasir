@@ -14,127 +14,201 @@
             --secondary: #6B4226; 
             --bg: #f9f9f9;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg); color: #333; }
-        header { background-color: var(--primary); color: var(--secondary); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 24px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .tabs { display: flex; gap: 10px; }
-        .tab-btn { background: white; border: 2px solid var(--secondary); color: var(--secondary); padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .tab-btn.active { background: var(--secondary); color: white; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg); color: #333; overflow-x: hidden; }
         
-        .container { display: flex; padding: 20px; gap: 20px; height: calc(100vh - 100px); box-sizing: border-box; }
+        /* HEADER & HAMBURGER */
+        header { background-color: var(--primary); color: var(--secondary); padding: 15px 20px; display: flex; align-items: center; font-weight: bold; font-size: 24px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .hamburger-btn { background: none; border: none; font-size: 28px; color: var(--secondary); cursor: pointer; margin-right: 15px; padding: 0; display: flex; align-items: center; }
         
+        /* SIDEBAR */
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: white; z-index: 1001; transition: 0.3s ease-in-out; box-shadow: 2px 0 10px rgba(0,0,0,0.2); display: flex; flex-direction: column; }
+        .sidebar.open { left: 0; }
+        .sidebar-header { background: var(--primary); color: var(--secondary); padding: 20px; font-size: 22px; font-weight: bold; text-align: center; border-bottom: 2px solid var(--secondary); }
+        .sidebar-menu { flex: 1; padding: 20px 0; overflow-y: auto; }
+        .sidebar-btn { display: block; width: 100%; text-align: left; background: none; border: none; padding: 15px 20px; font-size: 16px; font-weight: bold; color: #333; cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
+        .sidebar-btn:hover { background: #f0f0f0; border-left: 4px solid var(--secondary); }
+        .sidebar-btn.active { background: #ffeaa7; color: var(--secondary); border-left: 4px solid var(--secondary); }
+        .sidebar-footer { padding: 20px; border-top: 1px solid #ddd; }
+        
+        /* TOMBOL BUKA TUTUP KASIR */
+        .btn-status-kasir { width: 100%; padding: 12px; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; color: white; }
+        .btn-buka { background: #27ae60; }
+        .btn-buka:hover { background: #219653; }
+        .btn-tutup { background: #e74c3c; }
+        .btn-tutup:hover { background: #c0392b; }
+
+        /* KONTEN UTAMA */
+        .container { display: flex; padding: 20px; gap: 20px; height: calc(100vh - 70px); box-sizing: border-box; }
+        
+        /* KASIR SECTION */
         .menu-section { flex: 2; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow-y: auto; }
         .category-title { color: var(--secondary); border-bottom: 2px solid var(--primary); padding-bottom: 5px; margin-top: 0; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .menu-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; text-align: center; cursor: pointer; transition: 0.2s; background: #fff; }
         .menu-card:hover { border-color: var(--primary); box-shadow: 0 4px 8px rgba(0,0,0,0.1); transform: translateY(-2px); }
         .menu-name { font-weight: bold; margin-bottom: 5px; font-size: 14px; }
         .menu-price { color: #27ae60; font-weight: bold; }
 
-        .cart-section { flex: 1; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        /* CART SECTION */
+        .cart-section { flex: 1; min-width: 300px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
         .cart-items { flex: 1; overflow-y: auto; margin-bottom: 20px; border-bottom: 2px dashed #ddd; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 14px; }
         .cart-item-controls { display: flex; align-items: center; gap: 10px; }
-        .btn-qty { background: #eee; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+        .btn-qty { background: #eee; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; font-weight:bold; }
         .cart-total { font-size: 20px; font-weight: bold; display: flex; justify-content: space-between; margin-bottom: 20px; }
         .btn-beli { background: var(--secondary); color: white; border: none; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; transition: 0.2s; }
         .btn-beli:hover { background: #50311c; }
+        .btn-beli:disabled { background: #ccc; cursor: not-allowed; }
 
-        #rekapan { display: none; width: 100%; background: white; padding: 20px; border-radius: 10px; }
-        .rekapan-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ddd; padding-bottom: 15px; margin-bottom: 20px; }
-        .rekapan-controls { display: flex; gap: 15px; align-items: center; }
+        /* REKAPAN & RIWAYAT SECTION */
+        .page-container { display: none; width: 100%; background: white; padding: 20px; border-radius: 10px; flex-direction: column; height: calc(100vh - 70px); box-sizing: border-box; overflow-y: auto;}
+        .page-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ddd; padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap:15px;}
+        .page-controls { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .filter-select { padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; font-weight: bold; color: var(--secondary); }
         
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: var(--primary); color: var(--secondary); }
-        
-        /* Tambahan CSS untuk tombol hapus satuan */
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .table-responsive { overflow-x: auto; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 14px;}
+        th { background-color: var(--primary); color: var(--secondary); position: sticky; top: 0; }
         .btn-delete-item { background: #e74c3c; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; }
         .btn-delete-item:hover { background: #c0392b; }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-        .modal { background: white; padding: 30px; border-radius: 10px; text-align: center; width: 350px; }
-        .modal h3 { margin-top: 0; }
+        /* MODALS */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 2000; padding: 20px;}
+        .modal { background: white; padding: 25px; border-radius: 10px; text-align: center; width: 100%; max-width: 380px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .modal h3 { margin-top: 0; color: var(--secondary); border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
         .modal-btns { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
-        .modal-btn { flex: 1; padding: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; border-radius: 5px; }
+        .modal-btn { flex: 1; padding: 12px; font-size: 15px; font-weight: bold; cursor: pointer; border: none; border-radius: 5px; transition: 0.2s; }
         .btn-cash { background: #27ae60; color: white; }
         .btn-qris { background: #2980b9; color: white; }
         .btn-yes { background: #27ae60; color: white; }
         .btn-no { background: #e74c3c; color: white; }
+        .btn-batal { background: #95a5a6; color: white; }
         
         .cash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        
+        .input-modal { width: 100%; padding: 12px; margin: 15px 0; font-size: 18px; font-weight: bold; border: 2px solid #ddd; border-radius: 5px; box-sizing: border-box; text-align: center; }
+        .input-modal:focus { border-color: var(--primary); outline: none; }
+        
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 15px; border-bottom: 1px dashed #eee; padding-bottom: 5px;}
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; height: auto; }
+            .menu-section, .cart-section { flex: none; width: 100%; }
+            .cart-section { height: auto; min-height: 400px; }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div>🍌 Pisang Hero POS</div>
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('kasir')">Menu Kasir</button>
-            <button class="tab-btn" onclick="switchTab('rekapan')">Rekapan Penjualan</button>
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">🍌 Pisang Hero Menu</div>
+        <div class="sidebar-menu">
+            <button class="sidebar-btn active" id="tab-kasir" onclick="switchTab('kasir')">🛒 Menu Kasir</button>
+            <button class="sidebar-btn" id="tab-rekapan" onclick="switchTab('rekapan')">📊 Rekapan Transaksi</button>
+            <button class="sidebar-btn" id="tab-riwayat" onclick="switchTab('riwayat')">📒 Laporan Sesi Shift</button>
         </div>
+        <div class="sidebar-footer" id="kasir-control">
+            </div>
+    </div>
+
+    <header>
+        <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+        <div>Pisang Hero POS</div>
     </header>
 
     <div class="container" id="kasir">
         <div class="menu-section" id="menu-container"></div>
         <div class="cart-section">
-            <h2 style="margin-top:0; color: var(--secondary);">Pesanan Saat Ini</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin-top:0; color: var(--secondary);">Pesanan Saat Ini</h2>
+                <span id="status-badge" style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: bold;">KASIR TUTUP</span>
+            </div>
             <div class="cart-items" id="cart-items"></div>
             <div class="cart-total">
                 <span>Total:</span>
                 <span id="total-price">Rp 0</span>
             </div>
-            <button class="btn-beli" onclick="openPaymentModal()">PROSES BELI</button>
+            <button class="btn-beli" id="btn-proses-beli" onclick="openPaymentModal()">PROSES BELI</button>
         </div>
     </div>
 
-    <div class="container" id="rekapan">
-        <div class="rekapan-header">
+    <div class="page-container" id="rekapan">
+        <div class="page-header">
             <div>
-                <h2 style="color: var(--secondary); margin-top: 0;">Rekapan Penjualan</h2>
+                <h2 style="color: var(--secondary); margin-top: 0;">Rekapan Transaksi (Semua)</h2>
                 <div style="font-size: 20px; font-weight: bold;">
                     Total Pendapatan: <span id="total-revenue" style="color: #27ae60;">Rp 0</span>
                 </div>
             </div>
-            <div class="rekapan-controls">
+            <div class="page-controls">
                 <div>
                     <label for="filter-tanggal" style="font-weight: bold; color: var(--secondary);">Filter Tanggal:</label>
                     <select id="filter-tanggal" class="filter-select" onchange="renderRekapan()"></select>
                 </div>
-                <button class="modal-btn btn-no" style="padding: 10px 15px;" onclick="clearHistory()">🗑️ Hapus Semua</button>
+                <button class="modal-btn btn-no" style="padding: 10px 15px; flex: none;" onclick="clearHistory()">🗑️ Hapus Semua</button>
             </div>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Waktu</th>
-                    <th>Detail Pesanan</th>
-                    <th>Total Pembayaran</th>
-                    <th>Metode</th>
-                    <th style="width: 80px; text-align: center;">Aksi</th>
-                </tr>
-            </thead>
-            <tbody id="rekapan-body"></tbody>
-        </table>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Waktu</th>
+                        <th>Detail Pesanan</th>
+                        <th>Total Pembayaran</th>
+                        <th>Metode</th>
+                        <th style="width: 80px; text-align: center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="rekapan-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="page-container" id="riwayat">
+        <div class="page-header">
+            <div>
+                <h2 style="color: var(--secondary); margin-top: 0;">Laporan Sesi / Shift Kasir</h2>
+                <p style="margin:0; color:#666;">Rekapan total setiap kali kasir ditutup.</p>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Waktu Buka - Tutup</th>
+                        <th>Modal Awal</th>
+                        <th>Pendapatan Cash</th>
+                        <th>Pendapatan QRIS</th>
+                        <th>Total Uang di Laci</th>
+                    </tr>
+                </thead>
+                <tbody id="riwayat-sesi-body"></tbody>
+            </table>
+        </div>
     </div>
 
     <div class="modal-overlay" id="payment-modal">
         <div class="modal">
             <h3 id="modal-title">Pilih Metode Pembayaran</h3>
-            <p style="font-size: 24px; font-weight: bold; margin: 10px 0;" id="modal-total"></p>
+            <p style="font-size: 24px; font-weight: bold; margin: 10px 0; color: var(--secondary);" id="modal-total"></p>
             
             <div class="modal-btns" id="step-method">
                 <button class="modal-btn btn-cash" onclick="promptCash()">CASH</button>
                 <button class="modal-btn btn-qris" onclick="promptQris()">QRIS</button>
-                <button class="modal-btn" style="background: #ccc;" onclick="closeModal()">Batal</button>
+                <button class="modal-btn btn-batal" onclick="closeModal('payment-modal')">Batal</button>
             </div>
             
             <div id="step-qris" style="display: none;">
                 <p style="color: #e74c3c; font-weight: bold;">Apakah customer sudah bayar via QRIS?</p>
                 <div class="modal-btns">
                     <button class="modal-btn btn-yes" onclick="processPayment('QRIS')">Sudah</button>
-                    <button class="modal-btn btn-no" onclick="closeModal()">Belum</button>
+                    <button class="modal-btn btn-no" onclick="closeModal('payment-modal')">Belum</button>
                 </div>
             </div>
 
@@ -147,14 +221,55 @@
                     <button class="modal-btn btn-cash" onclick="payWithCash(100000)">Rp 100.000</button>
                 </div>
                 <div class="modal-btns" style="margin-top: 15px;">
-                    <button class="modal-btn btn-no" onclick="closeModal()">Batal</button>
+                    <button class="modal-btn btn-batal" onclick="closeModal('payment-modal')">Batal</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="modal-overlay" id="modal-buka-kasir">
+        <div class="modal">
+            <h3>Buka Kasir</h3>
+            <p>Masukkan uang modal awal di laci kasir untuk hari ini.</p>
+            <input type="number" id="input-modal-awal" class="input-modal" placeholder="Contoh: 100000">
+            <div class="modal-btns">
+                <button class="modal-btn btn-yes" onclick="submitBukaKasir()">Buka Kasir</button>
+                <button class="modal-btn btn-batal" onclick="closeModal('modal-buka-kasir')">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-tutup-kasir">
+        <div class="modal">
+            <h3>Tutup Kasir</h3>
+            <p style="font-size: 14px; color: #666; margin-top:-5px; margin-bottom: 15px;">Rekapan sejak kasir dibuka</p>
+            
+            <div class="info-row">
+                <span>Modal Awal:</span>
+                <strong id="summary-modal">Rp 0</strong>
+            </div>
+            <div class="info-row">
+                <span>Pendapatan Tunai (CASH):</span>
+                <strong id="summary-cash">Rp 0</strong>
+            </div>
+            <div class="info-row">
+                <span>Pendapatan QRIS:</span>
+                <strong id="summary-qris" style="color: #2980b9;">Rp 0</strong>
+            </div>
+            <div class="info-row" style="background: #f0f0f0; padding: 10px; margin-top: 10px; border:none; border-radius: 5px;">
+                <span style="font-weight: bold; color: var(--secondary);">Total Uang Laci Fisik<br><small style="font-weight:normal">(Modal + Cash)</small></span>
+                <strong id="summary-laci" style="font-size: 18px; color: #27ae60;">Rp 0</strong>
+            </div>
+
+            <div class="modal-btns">
+                <button class="modal-btn btn-tutup" onclick="submitTutupKasir()">Akhiri & Simpan Laporan</button>
+                <button class="modal-btn btn-batal" onclick="closeModal('modal-tutup-kasir')">Batal</button>
+            </div>
+        </div>
+    </div>
+
 <script>
-    // 2. SETUP KONFIGURASI FIREBASE
+    // 1. SETUP FIREBASE
     const firebaseConfig = {
         apiKey: "AIzaSyBvUL_-Gu911JDob7yiJy4Bh_2eeHyaQag",
         authDomain: "pisang-hero.firebaseapp.com",
@@ -162,24 +277,21 @@
         projectId: "pisang-hero",
         storageBucket: "pisang-hero.firebasestorage.app",
         messagingSenderId: "473813788421",
-        appId: "1:473813788421:web:dc44f9473f57559f75396c",
-        measurementId: "G-TCYFD2X71E"
+        appId: "1:473813788421:web:dc44f9473f57559f75396c"
     };
 
-    // Inisialisasi Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // 2. DATA MENU
     const menuItems = [
         { id: 'm1', name: 'Matcha', price: 10000, category: 'Minuman' },
         { id: 'm2', name: 'Cokelat', price: 10000, category: 'Minuman' },
-        
         { id: 'f1', name: 'Keju Polos', price: 12000, category: 'Makanan' },
         { id: 'f2', name: 'Glaze Coklat', price: 15000, category: 'Makanan' },
         { id: 'f3', name: 'Glaze Taro', price: 15000, category: 'Makanan' }, 
-        { id: 'f4', name: 'Glaze Green Tea (Polos)', price: 15000, category: 'Makanan' },
+        { id: 'f4', name: 'Glaze Green Tea', price: 15000, category: 'Makanan' },
         { id: 'f5', name: 'Glaze Tiramisu', price: 15000, category: 'Makanan' },
-        
         { id: 's1', name: 'Original', price: 10000, category: 'Signature Menu' },
         { id: 's2', name: 'Meses', price: 12000, category: 'Signature Menu' },
         { id: 's3', name: 'Keju Meses', price: 14000, category: 'Signature Menu' },
@@ -192,16 +304,13 @@
         { id: 's12', name: 'Coklat Keju', price: 16000, category: 'Signature Menu' },
         { id: 's13', name: 'Tiramisu Oreo', price: 16000, category: 'Signature Menu' },
         { id: 's14', name: 'Keju Vanilla', price: 16000, category: 'Signature Menu' },
-        
         { id: 'c1', name: 'Keju Choco Crunchy', price: 17000, category: 'Chruncy Series' },
         { id: 'c2', name: 'Keju Tiramisu Crunchy', price: 17000, category: 'Chruncy Series' },
         { id: 'c3', name: 'Keju Green Tea Crunchy', price: 17000, category: 'Chruncy Series' },
-        
         { id: 'mt1', name: 'Keju Mix 2 Toping', price: 17000, category: 'Must Try' },
         { id: 'mt2', name: 'Keju Mix 2 Glaze', price: 17000, category: 'Must Try' },
         { id: 'mt3', name: 'Keju Mix 3 Topping', price: 18000, category: 'Must Try' },
         { id: 'mt4', name: 'Keju Mix 3 Glaze', price: 18000, category: 'Must Try' },
-
         { id: 't1', name: 'Topping Keju', price: 1000, category: 'Extra Topping' },
         { id: 't2', name: 'Topping Oreo', price: 1000, category: 'Extra Topping' },
         { id: 't3', name: 'Topping Mesis', price: 1000, category: 'Extra Topping' }
@@ -209,19 +318,148 @@
 
     let cart = [];
     let transactions = []; 
+    let sessionReports = [];
     const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka);
 
-    // 3. LISTENER REAL-TIME FIREBASE (Mengambil data sekaligus ID/Key nya)
-    db.ref('sales_history').on('value', (snapshot) => {
-        transactions = [];
-        snapshot.forEach((childSnapshot) => {
-            let data = childSnapshot.val();
-            data.id = childSnapshot.key; // MENANGKAP ID UNIK DARI FIREBASE
-            transactions.push(data);
-        });
-        renderRekapan();
+    // 3. SISTEM CLOUD SESSION KASIR
+    let sessionKasir = { isOpen: false, modalAwal: 0, waktuBuka: null };
+
+    // Listener Real-time status kasir
+    db.ref('active_session').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            sessionKasir = data;
+        } else {
+            sessionKasir = { isOpen: false, modalAwal: 0, waktuBuka: null };
+        }
+        updateKasirUI();
     });
 
+    // 4. LOGIKA UI SIDEBAR & TABS
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+            overlay.style.display = 'none';
+        } else {
+            sidebar.classList.add('open');
+            overlay.style.display = 'block';
+        }
+    }
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('tab-' + tabId).classList.add('active');
+        
+        document.getElementById('kasir').style.display = tabId === 'kasir' ? 'flex' : 'none';
+        document.getElementById('rekapan').style.display = tabId === 'rekapan' ? 'flex' : 'none';
+        document.getElementById('riwayat').style.display = tabId === 'riwayat' ? 'flex' : 'none';
+        
+        if(tabId === 'rekapan') renderRekapan();
+        toggleSidebar(); 
+    }
+
+    // 5. BUKA / TUTUP KASIR
+    function updateKasirUI() {
+        const controlDiv = document.getElementById('kasir-control');
+        const badge = document.getElementById('status-badge');
+        const btnProses = document.getElementById('btn-proses-beli');
+
+        if (sessionKasir.isOpen) {
+            controlDiv.innerHTML = `<button class="btn-status-kasir btn-tutup" onclick="openModal('modal-tutup-kasir'); kalkulasiTutupKasir();">🔒 Tutup Kasir</button>`;
+            badge.innerText = "KASIR BUKA";
+            badge.style.background = "#27ae60";
+            btnProses.disabled = false;
+        } else {
+            controlDiv.innerHTML = `<button class="btn-status-kasir btn-buka" onclick="openModal('modal-buka-kasir')">🔓 Buka Kasir</button>`;
+            badge.innerText = "KASIR TUTUP";
+            badge.style.background = "#e74c3c";
+            btnProses.disabled = true;
+        }
+    }
+
+    function openModal(id) { 
+        document.getElementById(id).style.display = 'flex'; 
+        if(id === 'modal-buka-kasir') {
+            document.getElementById('input-modal-awal').value = '';
+            document.getElementById('input-modal-awal').focus();
+        }
+    }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    function submitBukaKasir() {
+        const inputModal = document.getElementById('input-modal-awal').value;
+        if (!inputModal || inputModal < 0) {
+            alert("Masukkan jumlah modal awal yang valid!");
+            return;
+        }
+        
+        const dataBaru = {
+            isOpen: true,
+            modalAwal: parseInt(inputModal),
+            waktuBuka: Date.now()
+        };
+        
+        db.ref('active_session').set(dataBaru).then(() => {
+            closeModal('modal-buka-kasir');
+            toggleSidebar();
+            alert(`Kasir berhasil dibuka!\nModal Awal: ${formatRp(dataBaru.modalAwal)}`);
+        });
+    }
+
+    function kalkulasiTutupKasir() {
+        if(!sessionKasir.isOpen) return;
+
+        const trxSesiIni = transactions.filter(trx => trx.timestamp >= sessionKasir.waktuBuka);
+        let totalCash = 0; let totalQris = 0;
+
+        trxSesiIni.forEach(trx => {
+            if(trx.method === 'CASH') totalCash += trx.total;
+            if(trx.method === 'QRIS') totalQris += trx.total;
+        });
+
+        const laciFisik = sessionKasir.modalAwal + totalCash;
+
+        document.getElementById('summary-modal').innerText = formatRp(sessionKasir.modalAwal);
+        document.getElementById('summary-cash').innerText = formatRp(totalCash);
+        document.getElementById('summary-qris').innerText = formatRp(totalQris);
+        document.getElementById('summary-laci').innerText = formatRp(laciFisik);
+
+        return { totalCash, totalQris, laciFisik };
+    }
+
+    function submitTutupKasir() {
+        if (confirm("Yakin ingin menutup sesi kasir? Laporan akan tersimpan dan semua device akan ikut tertutup.")) {
+            const hasil = kalkulasiTutupKasir();
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID') + ' ' + now.toLocaleTimeString('id-ID');
+            
+            const reportData = {
+                waktuBuka: sessionKasir.waktuBuka,
+                waktuTutup: Date.now(),
+                dateStr: dateStr,
+                modalAwal: sessionKasir.modalAwal,
+                pendapatanCash: hasil.totalCash,
+                pendapatanQris: hasil.totalQris,
+                totalLaci: hasil.laciFisik
+            };
+
+            // Simpan laporan ke Firebase, lalu hapus session aktif
+            db.ref('session_history').push(reportData).then(() => {
+                return db.ref('active_session').remove();
+            }).then(() => {
+                closeModal('modal-tutup-kasir');
+                toggleSidebar();
+                alert("Kasir ditutup. Laporan shift berhasil disimpan.");
+            }).catch(err => {
+                alert("Gagal memproses: " + err.message);
+            });
+        }
+    }
+
+
+    // 6. LOGIKA KERANJANG & TRANSAKSI
     function renderMenu() {
         const container = document.getElementById('menu-container');
         container.innerHTML = '';
@@ -243,6 +481,10 @@
     }
 
     function addToCart(id) {
+        if (!sessionKasir.isOpen) {
+            alert("Silakan buka kasir terlebih dahulu melalui menu di kiri atas (☰)!");
+            return;
+        }
         const item = menuItems.find(m => m.id === id);
         const existing = cart.find(c => c.id === id);
         if (existing) { existing.qty++; } else { cart.push({ ...item, qty: 1 }); }
@@ -280,16 +522,15 @@
     function getTotal() { return cart.reduce((sum, item) => sum + (item.price * item.qty), 0); }
 
     function openPaymentModal() {
+        if (!sessionKasir.isOpen) { alert("Buka kasir dulu bosku!"); return; }
         if (cart.length === 0) { alert("Keranjang masih kosong!"); return; }
         document.getElementById('modal-total').innerText = formatRp(getTotal());
         document.getElementById('step-method').style.display = 'flex';
         document.getElementById('step-qris').style.display = 'none';
         document.getElementById('step-cash').style.display = 'none';
         document.getElementById('modal-title').innerText = "Pilih Metode Pembayaran";
-        document.getElementById('payment-modal').style.display = 'flex';
+        openModal('payment-modal');
     }
-
-    function closeModal() { document.getElementById('payment-modal').style.display = 'none'; }
 
     function promptQris() {
         document.getElementById('step-method').style.display = 'none';
@@ -306,14 +547,11 @@
     function payWithCash(nominal) {
         const total = getTotal();
         let uangDiterima = nominal === 'pas' ? total : nominal;
-
         if (uangDiterima < total) {
             alert(`Peringatan: Uang kurang! Total belanja adalah ${formatRp(total)}`);
             return;
         }
-
-        const kembalian = uangDiterima - total;
-        processPayment('CASH', kembalian);
+        processPayment('CASH', uangDiterima - total);
     }
 
     function processPayment(method, kembalian = 0) {
@@ -327,7 +565,7 @@
             items: summary, 
             total: total, 
             method: method,
-            timestamp: firebase.database.ServerValue.TIMESTAMP 
+            timestamp: Date.now()
         };
         
         db.ref('sales_history').push(dataTransaksi).then(() => {
@@ -335,16 +573,40 @@
             if (method === 'CASH') {
                 pesanSukses += `\n\n------------------------\nKEMBALIAN: ${formatRp(kembalian)}\n------------------------`;
             }
-            
             alert(pesanSukses);
-            
             cart = []; 
             updateCartUI(); 
-            closeModal(); 
+            closeModal('payment-modal'); 
         }).catch((error) => {
             alert("Gagal menyimpan ke database: " + error.message);
         });
     }
+
+    // 7. FIREBASE REAL-TIME LISTENERS (Transaksi & Laporan Shift)
+    db.ref('sales_history').on('value', (snapshot) => {
+        transactions = [];
+        snapshot.forEach((childSnapshot) => {
+            let data = childSnapshot.val();
+            data.id = childSnapshot.key;
+            if(!data.timestamp || data.timestamp < 1000000000000) {
+                data.timestamp = new Date(data.date.split(' ')[0].split('/').reverse().join('-')).getTime() || 0;
+            }
+            transactions.push(data);
+        });
+        renderRekapan();
+        if(document.getElementById('modal-tutup-kasir').style.display === 'flex') kalkulasiTutupKasir();
+    });
+
+    // Listener untuk riwayat sesi / shift
+    db.ref('session_history').on('value', (snapshot) => {
+        sessionReports = [];
+        snapshot.forEach((child) => {
+            let data = child.val();
+            data.id = child.key;
+            sessionReports.push(data);
+        });
+        renderRiwayatSesi();
+    });
 
     function renderRekapan() {
         const tbody = document.getElementById('rekapan-body');
@@ -371,7 +633,6 @@
         
         [...filteredTransactions].reverse().forEach(trx => {
             totalRev += trx.total;
-            // Menambahkan tombol Hapus di baris td terakhir
             tbody.innerHTML += `
                 <tr>
                     <td>${trx.date}</td>
@@ -387,30 +648,39 @@
         document.getElementById('total-revenue').innerText = formatRp(totalRev);
     }
 
-    // FITUR BARU: Hapus Satu Pesanan
+    function renderRiwayatSesi() {
+        const tbody = document.getElementById('riwayat-sesi-body');
+        tbody.innerHTML = '';
+        
+        [...sessionReports].reverse().forEach(rep => {
+            const dateBuka = new Date(rep.waktuBuka);
+            const strBuka = dateBuka.toLocaleDateString('id-ID') + ' ' + dateBuka.toLocaleTimeString('id-ID');
+            
+            tbody.innerHTML += `
+                <tr>
+                    <td>
+                        <span style="color: #27ae60; font-weight:bold;">Buka:</span> ${strBuka}<br>
+                        <span style="color: #e74c3c; font-weight:bold;">Tutup:</span> ${rep.dateStr}
+                    </td>
+                    <td>${formatRp(rep.modalAwal)}</td>
+                    <td>${formatRp(rep.pendapatanCash)}</td>
+                    <td><span style="color: #2980b9;">${formatRp(rep.pendapatanQris)}</span></td>
+                    <td><strong style="color: #27ae60; font-size: 16px;">${formatRp(rep.totalLaci)}</strong></td>
+                </tr>`;
+        });
+    }
+
     function deleteSingleTransaction(transactionId) {
-        const konfirmasi = confirm("Apakah Anda yakin ingin menghapus pesanan ini?");
-        if (konfirmasi) {
-            // Mencari spesifik data berdasarkan ID di database dan menghapusnya
-            db.ref('sales_history/' + transactionId).remove().then(() => {
-                // Tidak perlu alert sukses agar lebih cepat, langsung hilang dari tabel
-                // karena otomatis di-trigger oleh db.ref('sales_history').on('value', ...)
-            }).catch((error) => {
+        if (confirm("Apakah Anda yakin ingin menghapus pesanan ini?")) {
+            db.ref('sales_history/' + transactionId).remove().catch((error) => {
                 alert("Gagal menghapus data: " + error.message);
             });
         }
     }
 
-    // FITUR LAMA: Hapus Semua Riwayat
     function clearHistory() {
-        if (transactions.length === 0) {
-            alert("Riwayat penjualan sudah kosong.");
-            return;
-        }
-        
-        const konfirmasi = confirm("⚠️ PERINGATAN!\nApakah Anda yakin ingin menghapus SEMUA riwayat penjualan di DATABASE?\nData yang dihapus tidak dapat dikembalikan.");
-        
-        if (konfirmasi) {
+        if (transactions.length === 0) { alert("Riwayat penjualan sudah kosong."); return; }
+        if (confirm("⚠️ PERINGATAN!\nApakah Anda yakin ingin menghapus SEMUA riwayat penjualan di DATABASE?")) {
             db.ref('sales_history').remove().then(() => {
                 alert("✅ Seluruh riwayat penjualan berhasil dihapus dari Cloud.");
             }).catch((error) => {
@@ -419,14 +689,7 @@
         }
     }
 
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        if(event) event.target.classList.add('active');
-        document.getElementById('kasir').style.display = tabId === 'kasir' ? 'flex' : 'none';
-        document.getElementById('rekapan').style.display = tabId === 'rekapan' ? 'block' : 'none';
-        if(tabId === 'rekapan') renderRekapan();
-    }
-
+    // INIT APLIKASI
     renderMenu();
 </script>
 </body>
